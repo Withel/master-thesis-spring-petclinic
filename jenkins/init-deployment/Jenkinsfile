@@ -1,0 +1,17 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Withel/master-thesis-spring-petclinic.git']]])
+            }
+        }
+        
+        stage('Deploy to cluster'){
+            steps {
+                sh 'kubectl apply -f kubernetes/manifest.yaml'
+            }
+        }
+    }
+}
