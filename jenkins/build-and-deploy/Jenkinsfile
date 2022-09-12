@@ -34,7 +34,7 @@ pipeline {
             steps {                
                 script {
                     // dockerImage = docker.build("mklimas/petclinic")
-                    dockerimage = docker.build("$env.registry")
+                    dockerimage = docker.build("${env.registry}")
                 }
             }
         }
