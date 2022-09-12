@@ -1,0 +1,11 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Delete k8s objects'){
+            steps {
+                sh 'kubectl delete all --all' 
+            }
+        }
+    }
+}
