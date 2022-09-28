@@ -47,7 +47,6 @@ pipeline {
 
             post {
                 success {
-                    sh "docker rmi $IMAGE_NAME"
                     sh "docker rmi $IMAGE_NAME_LATEST"    
                 }
             }
