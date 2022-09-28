@@ -57,7 +57,7 @@ pipeline {
 
         stage ('Deploy') {
             steps {
-                    sh 'kubectl set image deployment/petclinic petclinic=$WEB_IMAGE_NAME'
+                    sh 'kubectl set image deployment/petclinic petclinic=$IMAGE_NAME'
             }
         }
     }
