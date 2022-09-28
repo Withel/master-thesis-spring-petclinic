@@ -4,10 +4,9 @@ pipeline {
     
     environment {
         registryCredentials = "DOCKER_HUB_CREDS"
-        registry = "mklimas/petclinic"
         dockerImage = ""
-        IMAGE_NAME="${registry}:${BUILD_NUMBER}" 
-        IMAGE_NAME_LATEST = "${registry}:latest"
+        IMAGE_NAME="mklimas/petclinic:${BUILD_NUMBER}" 
+        IMAGE_NAME_LATEST = "mklimas/petclinic:latest"
     }
     
     stages {
