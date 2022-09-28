@@ -1,0 +1,56 @@
+pipeline {
+    
+    agent any
+    
+    environment {
+        registryCredentials = "DOCKER_HUB_CREDS"
+        registry = "mklimas/petclinic"
+        IMAGE_NAME="${registry}:${BUILD_NUMBER}" 
+        IMAGE_NAME_LATEST = "${registry}:latest"
+    }
+    
+    stages {
+        stage ('Checkout') {
+            steps{
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Withel/master-thesis-spring-petclinic']]])
+            }
+        }
+        stage ('Build JAR file') {
+            steps {
+                sh './gradlew build'
+            }
+
+            post {
+                success {
+                    junit 'build/test-results/test/TEST-*.xml'    
+                }
+            }
+        }
+        
+        stage ('Build Docker image') {
+            steps {                
+                script {
+                    dockerImage = docker.build("mklimas/petclinic")
+                    // dockerimage = docker.build("${registry}")
+                }
+            }
+        }
+        
+        stage('Push Image') {
+            steps{   
+                script {
+                    docker.withRegistry('', registryCredentials ) {
+                        dockerImage.push("latest")
+                    }
+                }
+            }
+
+            post {
+                success {
+                    sh "docker rmi $IMAGE_NAME"
+                    sh "docker rmi $IMAGE_NAME_LATEST"    
+                }
+            }
+        }
+    }
+}
